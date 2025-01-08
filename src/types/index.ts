@@ -7,6 +7,11 @@ export interface IProduct {
   price: number | null;
 }
 
+export interface IProductData {
+  total: number;
+	items: IProduct[];
+}
+
 export interface IContactInfo {
   payment: string;
 	address: string;
@@ -14,9 +19,9 @@ export interface IContactInfo {
 	phone: string;
 }
 
-export interface IProductData {
+export interface IOrderResponse extends IContactInfo {
   total: number;
-	items: IProduct[];
+  items: string;
 }
 
 export interface IOrderData {
