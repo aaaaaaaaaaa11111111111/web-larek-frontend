@@ -13,10 +13,10 @@ export interface IProductData {
 }
 
 export interface IContactInfo {
-  payment: string;
-	address: string;
-	email: string;
-	phone: string;
+  payment?: string;
+	address?: string;
+	email?: string;
+	phone?: string;
 }
 
 export interface IOrderResponse extends IContactInfo {
@@ -28,3 +28,5 @@ export interface IOrderData {
 	items: HTMLElement[];
 	total: number;
 }
+
+export type FormErrors = Partial<Record<keyof IContactInfo, string>>;
