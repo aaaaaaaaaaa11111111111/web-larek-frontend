@@ -87,7 +87,7 @@ export class AppState extends Model<IProduct> {
     fillContactInfo(field: keyof IContactInfo, value: string): void {
         this.userData[field] = value;
         if (this.validateContact()) {
-            this.events.emit('purchase:done', this.userData)
+            this.events.emit('purchase:ready', this.userData)
         }
     }
 
