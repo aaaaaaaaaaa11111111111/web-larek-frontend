@@ -1,4 +1,4 @@
-import { IContactInfo, IProduct, FormErrors } from "../types";
+import { IContactInfo, IProduct, TFormErrors } from "../types";
 import { IEvents } from "./base/events";
 import { Model } from "./base/Model";
 
@@ -7,10 +7,11 @@ export class AppState extends Model<IProduct> {
     preview: string;
     basket: IProduct[] = [];
     userData: IContactInfo = {};
-    formErrors: FormErrors = {};
+    formErrors: TFormErrors = {};
 
     constructor(data: Partial<IProduct>, events: IEvents) {
         super(data, events);
+        
         this.userData = {
             payment: '',
             address: '',

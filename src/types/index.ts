@@ -29,4 +29,15 @@ export interface IOrderData {
 	total: number;
 }
 
-export type FormErrors = Partial<Record<keyof IContactInfo, string>>;
+export type TFormErrors = Partial<Record<keyof IContactInfo, string>>;
+
+export type TCategory =
+	| 'другое'
+	| 'софт-скил'
+	| 'дополнительное'
+	| 'кнопка'
+	| 'хард-скил';
+
+export type TCategoryList = {
+	[Key in TCategory]: string;
+};

@@ -6,6 +6,7 @@ export class LarekApi extends Api {
 
 	constructor(baseUrl: string, cdn: string, options?: RequestInit) {
 		super(baseUrl, options);
+		
 		this.cdn = cdn;
 	}
 
