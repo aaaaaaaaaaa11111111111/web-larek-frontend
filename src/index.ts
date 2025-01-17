@@ -4,11 +4,19 @@ import { LarekApi } from './components/LarekApi';
 import { API_URL, CDN_URL } from './utils/constants';
 import { AppState } from './components/AppState';
 import { IProduct } from './types';
+import { ensureElement } from './utils/utils';
 
 const events = new EventEmitter();
 const api = new LarekApi(API_URL, CDN_URL);
 const appState = new AppState({}, events);
 
+const successTemp = ensureElement<HTMLTemplateElement>('#success');
+const cardCatalogTemp = ensureElement<HTMLTemplateElement>('#card-catalog');
+const cardPreviewTemp = ensureElement<HTMLTemplateElement>('#card-preview');
+const cardBasketTemp = ensureElement<HTMLTemplateElement>('#card-basket');
+const basketTemp = ensureElement<HTMLTemplateElement>('#basket');
+const orderTemp = ensureElement<HTMLTemplateElement>('#order');
+const contactsTemp = ensureElement<HTMLTemplateElement>('#contacts');
 
 api.getProductsList()
 .then((products: IProduct[]) => {
