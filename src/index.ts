@@ -4,7 +4,13 @@ import { LarekApi } from './components/LarekApi';
 import { API_URL, CDN_URL } from './utils/constants';
 import { AppState } from './components/AppState';
 import { IProduct } from './types';
-import { ensureElement } from './utils/utils';
+import { cloneTemplate, ensureElement } from './utils/utils';
+import { Page } from './components/Page';
+import { Modal } from './components/common/Modal';
+import { Basket } from './components/common/Basket';
+import { Order } from './components/Order';
+import { Contacts } from './components/Contacts';
+import { Success } from './components/common/Success';
 
 const events = new EventEmitter();
 const api = new LarekApi(API_URL, CDN_URL);
@@ -17,6 +23,16 @@ const cardBasketTemp = ensureElement<HTMLTemplateElement>('#card-basket');
 const basketTemp = ensureElement<HTMLTemplateElement>('#basket');
 const orderTemp = ensureElement<HTMLTemplateElement>('#order');
 const contactsTemp = ensureElement<HTMLTemplateElement>('#contacts');
+
+const page = new Page(document.body, events);
+const modal = new Modal(ensureElement<HTMLElement>('#modal__container'), events);
+const basket = new Basket(cloneTemplate(basketTemp), events);
+const order = new Order(cloneTemplate<HTMLFormElement>(orderTemp), events);
+const contacts = new Contacts(cloneTemplate<HTMLFormElement>(contactsTemp), events);
+const success = new Success(cloneTemplate(successTemp), { onClick: () => {
+		modal.close();
+	}
+});
 
 api.getProductsList()
 .then((products: IProduct[]) => {
