@@ -11,7 +11,7 @@ import { Basket } from './components/common/Basket';
 import { Order } from './components/Order';
 import { Contacts } from './components/Contacts';
 import { Success } from './components/common/Success';
-import { CardPage } from './components/Card';
+import { CardBasket, CardPage, CardPreview } from './components/Card';
 
 const events = new EventEmitter();
 const api = new LarekApi(API_URL, CDN_URL);
@@ -57,33 +57,70 @@ api
 		});
 	});
 
-// .then((products: IProduct[]) => {
-// 	console.log('poluchili ot api:', products);
+	events.on('item:selected', (item: IProduct) => {
+		appState.setPreview(item);
+	});
 
-// 	appState.addProducts(products);
+	events.on('preview:changed', (item: IProduct) => {
+		const productInBasket = appState.hasProductInBasket(item.id)
+		const cardPreview = new CardPreview(cloneTemplate(cardPreviewTemp), {
+			onClick: () => {
+				if(productInBasket) {
+					events.emit('basket:delete', item);
+				} else {
+					events.emit('item:moved', item);
+				}
+				modal.close();
+		}
+	});
 
-// 	console.log('get produtbI for pokushat:', appState.getProducts());
+	modal.render({
+		content: cardPreview.render({
+			id: item.id,
+			description: item.description,
+			image: api.cdn + item.image,
+			title: item.title,
+			category: item.category as TCategory,
+			price: item.price,
+			button: productInBasket ? 'Удалить из корзины' : 'В корзину',
+		})
+	});
+});
 
-// 	if(products.length > 0) {
-// 		const first = products[0];
+events.on('item:moved', (item: IProduct) => {
+	appState.addToBasket(item.id);
+});
 
-// 		appState.setPreview(first);
-// 		console.log('posmaret:', appState.preview);
+events.on('basket:changed', () => {
+	page.counter = appState.getBasketCounter();
+	basket.total = appState.getTotalBasket();
+	basket.list = appState.getBasket().map((item, index) => {
+		const cardBasket = new CardBasket(cloneTemplate(cardBasketTemp), {
+			onClick: () => events.emit('basket:delete', item)
+		});
 
-// 		console.log('toje smaret po nomery:', appState.getCardById('6a834fb8-350a-440c-ab55-d0e9b959b6e3'))
+		return cardBasket.render({
+			index: index + 1,
+			title: item.title,
+			price: item.price
+		});
+	});
+});
 
-// 		appState.addToBasket(first.id);
-// 		console.log('smotrim che pokupaem:', appState.getBasket());
+events.on('basket:opened', () => {
+	modal.render({
+		content: basket.render({})
+	});
+});
 
-// 		console.log('skoka nabral:', appState.getBasketCounter());
-// 		console.log('skoka stoit:', appState.getTotalBasket());
-		
-// 		console.log('chekaem korzinu id:', appState.getIdProductsBasket());
-// 		// appState.deleteFromBasket(first.id);
-// 		// console.log('ny i ceni y vas:', appState.getBasket());
+events.on('basket:delete', (item: IProduct) => {
+	appState.deleteFromBasket(item.id);
+});
 
-// 		console.log('chet vzyali?:', appState.hasProductInBasket('6a834fb8-350a-440c-ab55-d0e9b959b6e3'));
+events.on('modal:open', () => {
+	page.locked = true;
+});
 
-// 		console.log('oshibochka', appState.getFormErrors())
-// 	}
-// })
+events.on('modal:close', () => {
+	page.locked = false;
+})

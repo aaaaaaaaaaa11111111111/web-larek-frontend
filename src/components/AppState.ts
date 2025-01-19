@@ -61,7 +61,7 @@ export class AppState extends Model<IProduct> {
     }
 
     hasProductInBasket(id: string): boolean {
-        return this.basket.some((item) => item.id = id);
+        return this.basket.some((item) => item.id === id);
     }
 
     clearBasket(): void {

@@ -3,20 +3,20 @@ import { Component } from "../base/Component";
 import { IEvents } from "../base/events";
 
 interface IBasketView {
-    items: HTMLElement[];
+    list: HTMLElement[];
     total: number;
 }
 
 export class Basket extends Component<IBasketView> {
-    _total: HTMLElement;
+    basketTotal: HTMLElement;
     basketList: HTMLElement;
     button: HTMLElement;
     
     constructor(protected container: HTMLFormElement, protected events: IEvents) {
         super(container);
 
-        this.basketList = ensureElement<HTMLElement>('.basket__list');
-        this._total = ensureElement<HTMLElement>('.basket__price');
+        this.basketList = ensureElement<HTMLElement>('.basket__list', this.container);
+        this.basketTotal = ensureElement<HTMLElement>('.basket__price', this.container);
         this.button = this.container.querySelector('.basket__button');
 
         if (this.button) {
@@ -25,10 +25,10 @@ export class Basket extends Component<IBasketView> {
             });
         }
 
-        this.items = [];
+        this.list = [];
     }
 
-    set items(items: HTMLElement[]) {
+    set list(items: HTMLElement[]) {
         if (items.length) {
             this.basketList.replaceChildren(...items);
             this.button.removeAttribute('disabled');
@@ -39,6 +39,6 @@ export class Basket extends Component<IBasketView> {
     }
 
     set total(total: number) {
-        this.setText(this._total, `${total} синапсов`);
+        this.setText(this.basketTotal, `${total} синапсов`);
     }
 }

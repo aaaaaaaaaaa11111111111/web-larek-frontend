@@ -5,6 +5,8 @@ export interface IProduct {
   title: string;
   category: string;
   price: number | null;
+  index?: number;
+  button?: string;
 }
 
 export interface IProductData {
