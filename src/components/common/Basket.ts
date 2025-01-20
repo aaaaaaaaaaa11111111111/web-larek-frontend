@@ -8,8 +8,8 @@ interface IBasketView {
 }
 
 export class Basket extends Component<IBasketView> {
-    basketTotal: HTMLElement;
     basketList: HTMLElement;
+    basketTotal: HTMLElement;
     button: HTMLElement;
     
     constructor(protected container: HTMLFormElement, protected events: IEvents) {
