@@ -117,6 +117,19 @@ events.on('basket:delete', (item: IProduct) => {
 	appState.deleteFromBasket(item.id);
 });
 
+events.on('order:opened', () => {
+	const userInfo = appState.getUserData();
+	appState.reset();
+	modal.render({
+		content: order.render({
+			valid: false,
+			errors: [],
+			address: userInfo.address,
+			payment: userInfo.payment
+		})
+	});
+});
+
 events.on('modal:open', () => {
 	page.locked = true;
 });
