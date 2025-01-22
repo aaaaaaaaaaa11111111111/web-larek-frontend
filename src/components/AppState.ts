@@ -88,7 +88,7 @@ export class AppState extends Model<IProduct> {
     fillContactInfo(field: keyof IContactInfo, value: string): void {
         this.userData[field] = value;
         if (this.validateContact()) {
-            this.events.emit('purchase:ready', this.userData)
+            this.events.emit('order:ready', this.userData)
         }
     }
 
@@ -104,7 +104,7 @@ export class AppState extends Model<IProduct> {
             errors.email = 'Укажите адрес электронной почты';
         }
         if (!this.userData.phone) {
-            errors.address = 'Укажите номер телефона';
+            errors.phone = 'Укажите номер телефона';
         }
         this.formErrors = errors;
         this.events.emit('input:error', this.formErrors);

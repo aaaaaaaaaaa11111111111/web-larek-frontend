@@ -34,7 +34,7 @@ export class Form<T> extends Component<IFormState> {
 	}
 
 	protected onInputChange(field: keyof T, value: string) {
-		this.events.emit(`${this.container.name}.${String(field)}:change`, {
+		this.events.emit(`input:change`, {
 			field,
 			value,
 		});
@@ -43,7 +43,7 @@ export class Form<T> extends Component<IFormState> {
 	set valid(value: boolean) {
 		this._submit.disabled = !value;
 	}
-
+	
 	set errors(value: string) {
 		this.setText(this._errors, value);
 	}

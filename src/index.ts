@@ -3,7 +3,7 @@ import { EventEmitter } from './components/base/events';
 import { LarekApi } from './components/LarekApi';
 import { API_URL, CDN_URL } from './utils/constants';
 import { AppState } from './components/AppState';
-import { IProduct, TCategory } from './types';
+import { IContactInfo, IProduct, TCategory } from './types';
 import { cloneTemplate, ensureElement } from './utils/utils';
 import { Page } from './components/Page';
 import { Modal } from './components/common/Modal';
@@ -87,6 +87,14 @@ api
 	});
 });
 
+events.on('modal:open', () => {
+	page.locked = true;
+});
+
+events.on('modal:close', () => {
+	page.locked = false;
+})
+
 events.on('item:moved', (item: IProduct) => {
 	appState.addToBasket(item.id);
 });
@@ -119,6 +127,7 @@ events.on('basket:delete', (item: IProduct) => {
 
 events.on('order:opened', () => {
 	const userInfo = appState.getUserData();
+	console.log(userInfo);
 	appState.reset();
 	modal.render({
 		content: order.render({
@@ -130,10 +139,28 @@ events.on('order:opened', () => {
 	});
 });
 
-events.on('modal:open', () => {
-	page.locked = true;
+events.on('input:error', (errors: Partial<IContactInfo>) => {
+	const { payment, address, email, phone } = errors;
+	order.valid = !payment && !address;
+	contacts.valid = !email && !phone;
+	order.errors = Object.values({ payment, address })
+	    .filter((i) => !!i)
+		.join('; ');
+	contacts.errors = Object.values({ email, phone })
+	    .filter((i) => !!i)
+		.join('; ');
+    order.payment = appState.getPaymentField();
 });
 
-events.on('modal:close', () => {
-	page.locked = false;
-})
+events.on('input:change', (data: { field: keyof IContactInfo; value: string }) => {
+	appState.fillContactInfo(data.field, data.value);
+});
+
+events.on('order:submit', () => {
+	modal.render({
+		content: contacts.render({
+			valid: false,
+			errors: []
+		})
+	});
+});
