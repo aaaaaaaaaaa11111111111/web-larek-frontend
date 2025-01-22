@@ -1,7 +1,7 @@
 import { ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
 
-interface ISuccess {
+export interface ISuccess {
     total: number;
 }
 

@@ -3,14 +3,14 @@ import { EventEmitter } from './components/base/events';
 import { LarekApi } from './components/LarekApi';
 import { API_URL, CDN_URL } from './utils/constants';
 import { AppState } from './components/AppState';
-import { IContactInfo, IProduct, TCategory } from './types';
+import { IContactInfo, IOrderResponse, IProduct, TCategory } from './types';
 import { cloneTemplate, ensureElement } from './utils/utils';
 import { Page } from './components/Page';
 import { Modal } from './components/common/Modal';
 import { Basket } from './components/common/Basket';
 import { Order } from './components/Order';
 import { Contacts } from './components/Contacts';
-import { Success } from './components/common/Success';
+import { Success, ISuccess } from './components/common/Success';
 import { CardBasket, CardPage, CardPreview } from './components/Card';
 
 const events = new EventEmitter();
@@ -161,6 +161,37 @@ events.on('order:submit', () => {
 		content: contacts.render({
 			valid: false,
 			errors: []
+		})
+	});
+});
+
+events.on('contacts:submit', () => {
+	const orderData = appState.getUserData();
+	const products = appState.getIdProductsBasket();
+	const payload: IOrderResponse = {
+		payment: orderData.payment,
+		address: orderData.address,
+		email: orderData.email,
+		phone: orderData.phone,
+		total: appState.getTotalBasket(),
+		items: products
+	};
+	api
+	    .postOrder(payload)
+		.then((result) => {
+			events.emit('order:success', result);
+			appState.clearBasket();
+		})
+		.catch((error) => {
+			console.error('Ошибка отправки заказа:', error);
+		});
+
+});
+
+events.on('order:success', (result: ISuccess) => {
+	modal.render({
+		content: success.render ({
+			total: 123
 		})
 	});
 });

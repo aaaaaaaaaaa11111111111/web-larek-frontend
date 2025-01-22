@@ -23,7 +23,7 @@ export interface IContactInfo {
 
 export interface IOrderResponse extends IContactInfo {
   total: number;
-  items: string;
+  items: string[];
 }
 
 export interface IOrderData {
