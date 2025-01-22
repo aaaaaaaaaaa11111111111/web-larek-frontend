@@ -191,7 +191,7 @@ events.on('contacts:submit', () => {
 events.on('order:success', (result: ISuccess) => {
 	modal.render({
 		content: success.render ({
-			total: 123
+			total: result.total
 		})
 	});
 });
