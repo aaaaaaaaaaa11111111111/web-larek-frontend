@@ -29,7 +29,7 @@ export class Card extends Component<IProduct> {
 	}
 
 	set button(value: string) {
-		if (this._button) {
+		if(this._button) {
 			this._button.textContent = value;
 		}
 	}
@@ -39,10 +39,13 @@ export class Card extends Component<IProduct> {
 	}
 
 	set price(value: string) {
-		if (value === null) {
+		if(value === null) {
 			this.setText(this._price, 'Бесценно');
 		} else {
 			this.setText(this._price, `${value} синапсов`);
+		}
+		if(this._button) {
+			this._button.disabled = !value;	
 		}
 	}
 
