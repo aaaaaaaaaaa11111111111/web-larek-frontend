@@ -30,7 +30,8 @@ export class Card extends Component<IProduct> {
 
 	set button(value: string) {
 		if(this._button) {
-			this._button.textContent = value;
+			// this._button.textContent = value;
+			this.setText(this._button, value);
 		}
 	}
 

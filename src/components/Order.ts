@@ -25,12 +25,7 @@ export class Order extends Form<IContactInfo> {
         this.cashButton.classList.toggle('.button_alt-active', value === 'cash');
         this.cardButton.classList.toggle('.button_alt-active', value === 'card');
     }
-
-    disableButtons() {
-        this.cashButton.classList.remove('.button_alt-active');
-        this.cardButton.classList.remove('.button_alt-active');
-    }
-
+    
     set address(value: string) {
         (this.container.elements.namedItem('address') as HTMLInputElement).value = value;
     }
