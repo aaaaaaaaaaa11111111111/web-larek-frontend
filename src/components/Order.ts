@@ -15,7 +15,6 @@ export class Order extends Form<IContactInfo> {
 
         this.cashButton.addEventListener('click', ()=> {
             this.onInputChange('payment', 'cash');
-            console.log('cash')
         });
         this.cardButton.addEventListener('click', ()=> {
             this.onInputChange('payment', 'card');

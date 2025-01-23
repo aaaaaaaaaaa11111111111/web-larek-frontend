@@ -126,9 +126,8 @@ events.on('basket:delete', (item: IProduct) => {
 });
 
 events.on('order:opened', () => {
-	const userInfo = appState.getUserData();
-	console.log(userInfo);
 	appState.reset();
+	const userInfo = appState.getUserData();
 	modal.render({
 		content: order.render({
 			valid: false,
@@ -157,6 +156,7 @@ events.on('input:change', (data: { field: keyof IContactInfo; value: string }) =
 });
 
 events.on('order:submit', () => {
+	contacts.clear();
 	modal.render({
 		content: contacts.render({
 			valid: false,
@@ -176,16 +176,15 @@ events.on('contacts:submit', () => {
 		total: appState.getTotalBasket(),
 		items: products
 	};
+	
 	api
 	    .postOrder(payload)
 		.then((result) => {
 			events.emit('order:success', result);
-			appState.clearBasket();
 		})
 		.catch((error) => {
 			console.error('Ошибка отправки заказа:', error);
 		});
-
 });
 
 events.on('order:success', (result: ISuccess) => {
@@ -194,4 +193,5 @@ events.on('order:success', (result: ISuccess) => {
 			total: result.total
 		})
 	});
+	appState.clearBasket();
 });
