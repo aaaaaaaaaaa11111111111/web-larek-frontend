@@ -29,7 +29,7 @@ export class Card extends Component<IProduct> {
 	}
 
 	set button(value: string) {
-		if(this._button) {
+		if (this._button) {
 			this.setText(this._button, value);
 		}
 	}
@@ -39,13 +39,13 @@ export class Card extends Component<IProduct> {
 	}
 
 	set price(value: string) {
-		if(value === null) {
+		if (value === null) {
 			this.setText(this._price, 'Бесценно');
 		} else {
 			this.setText(this._price, `${value} синапсов`);
 		}
-		if(this._button) {
-			this._button.disabled = !value;	
+		if (this._button) {
+			this._button.disabled = !value;
 		}
 	}
 
@@ -76,29 +76,29 @@ export class CardPage extends Card {
 }
 
 export class CardPreview extends CardPage {
-    _description: HTMLElement;
+	_description: HTMLElement;
 
-    constructor(container: HTMLElement, actions?: ICardActions) {
-        super(container, actions);
+	constructor(container: HTMLElement, actions?: ICardActions) {
+		super(container, actions);
 
-        this._description = ensureElement<HTMLElement>('.card__text', container);
-    }
+		this._description = ensureElement<HTMLElement>('.card__text', container);
+	}
 
-    set description(value: string) {
-        this.setText(this._description, value);
-    }
+	set description(value: string) {
+		this.setText(this._description, value);
+	}
 }
 
 export class CardBasket extends Card {
-    private _index: HTMLElement;
+	private _index: HTMLElement;
 
-    constructor(container: HTMLElement, actions?: ICardActions) {
-        super(container, actions);
+	constructor(container: HTMLElement, actions?: ICardActions) {
+		super(container, actions);
 
-        this._index = ensureElement<HTMLElement>('.basket__item-index', container);
-    }
+		this._index = ensureElement<HTMLElement>('.basket__item-index', container);
+	}
 
-    set index(value: number) {
-        this.setText(this._index, value.toString());
-    }
+	set index(value: number) {
+		this.setText(this._index, value.toString());
+	}
 }

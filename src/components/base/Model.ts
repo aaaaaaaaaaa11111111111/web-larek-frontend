@@ -1,4 +1,4 @@
-import {IEvents} from "./events";
+import { IEvents } from './events';
 
 // // Гарда для проверки на модель
 // export const isModel = (obj: unknown): obj is Model<any> => {
@@ -6,12 +6,12 @@ import {IEvents} from "./events";
 // }
 
 export abstract class Model<T> {
-    constructor(data: Partial<T>, protected events: IEvents) {
-        Object.assign(this, data);
-    }
+	constructor(data: Partial<T>, protected events: IEvents) {
+		Object.assign(this, data);
+	}
 
-    // Сообщить всем что модель поменялась
-    emitChanges(event: string, payload?: object) {
-        this.events.emit(event, payload ?? {});
-    }
+	// Сообщить всем что модель поменялась
+	emitChanges(event: string, payload?: object) {
+		this.events.emit(event, payload ?? {});
+	}
 }

@@ -1,124 +1,124 @@
-import { IContactInfo, IProduct, TFormErrors } from "../types";
-import { IEvents } from "./base/events";
-import { Model } from "./base/Model";
+import { IContactInfo, IProduct, TFormErrors } from '../types';
+import { IEvents } from './base/events';
+import { Model } from './base/Model';
 
 export class AppState extends Model<IProduct> {
-    items: IProduct[] = [];
-    preview: string;
-    basket: IProduct[] = [];
-    userData: IContactInfo = {};
-    formErrors: TFormErrors = {};
+	items: IProduct[] = [];
+	preview: string;
+	basket: IProduct[] = [];
+	userData: IContactInfo = {};
+	formErrors: TFormErrors = {};
 
-    constructor(data: Partial<IProduct>, events: IEvents) {
-        super(data, events);
-        
-        this.userData = {
-            payment: '',
-            address: '',
-            email: '',
-            phone: ''
-        };
-    }
+	constructor(data: Partial<IProduct>, events: IEvents) {
+		super(data, events);
 
-    addProducts(cards: IProduct[]) {
-        this.items = cards;
-        this.events.emit('items:changed');
-    }
+		this.userData = {
+			payment: '',
+			address: '',
+			email: '',
+			phone: '',
+		};
+	}
 
-    getProducts(): IProduct[] {
-        return this.items;
-    }
+	addProducts(cards: IProduct[]) {
+		this.items = cards;
+		this.events.emit('items:changed');
+	}
 
-    getUserData(): IContactInfo {
-        return this.userData;
-    }
+	getProducts(): IProduct[] {
+		return this.items;
+	}
 
-    setPreview(card: IProduct) {
-        this.preview = card.id;
-        this.events.emit('preview:changed', card);
-    }
+	getUserData(): IContactInfo {
+		return this.userData;
+	}
 
-    getCardById(id: string): IProduct {
-        return this.items.find((item)=> item.id === id);
-    }
+	setPreview(card: IProduct) {
+		this.preview = card.id;
+		this.events.emit('preview:changed', card);
+	}
 
-    getBasket(): IProduct[] {
-        return this.basket;
-    }
+	getCardById(id: string): IProduct {
+		return this.items.find((item) => item.id === id);
+	}
 
-    getIdProductsBasket() {
-        return this.basket.map((item) => item.id);
-    }
+	getBasket(): IProduct[] {
+		return this.basket;
+	}
 
-    addToBasket(id: string): void {
-        this.basket.push(this.getCardById(id));
-        this.events.emit('basket:changed', this.basket);
-    }
+	getIdProductsBasket() {
+		return this.basket.map((item) => item.id);
+	}
 
-    deleteFromBasket(id: string): void {
-        this.basket = this.basket.filter((item) => item.id !== id);
-        this.events.emit('basket:changed', this.basket);
-    }
+	addToBasket(id: string): void {
+		this.basket.push(this.getCardById(id));
+		this.events.emit('basket:changed', this.basket);
+	}
 
-    hasProductInBasket(id: string): boolean {
-        return this.basket.some((item) => item.id === id);
-    }
+	deleteFromBasket(id: string): void {
+		this.basket = this.basket.filter((item) => item.id !== id);
+		this.events.emit('basket:changed', this.basket);
+	}
 
-    clearBasket(): void {
-        this.basket = [];
-        this.events.emit('basket:changed', this.basket);
-    }
+	hasProductInBasket(id: string): boolean {
+		return this.basket.some((item) => item.id === id);
+	}
 
-    getTotalBasket(): number {
-        return this.basket.reduce((acc, item) => acc + item.price, 0);
-    }
+	clearBasket(): void {
+		this.basket = [];
+		this.events.emit('basket:changed', this.basket);
+	}
 
-    getBasketCounter(): number {
-        return this.basket.length;
-    }
+	getTotalBasket(): number {
+		return this.basket.reduce((acc, item) => acc + item.price, 0);
+	}
 
-    getFormErrors() {
-        return this.formErrors;
-    }
+	getBasketCounter(): number {
+		return this.basket.length;
+	}
 
-    getPaymentField() {
-        return this.userData.payment;
-    }
+	getFormErrors() {
+		return this.formErrors;
+	}
 
-    fillContactInfo(field: keyof IContactInfo, value: string): void {
-        this.userData[field] = value;
-        if (this.validateContact()) {
-            this.events.emit('order:ready', this.userData)
-        }
-    }
+	getPaymentField() {
+		return this.userData.payment;
+	}
 
-    validateContact(): boolean {
-        const  errors: typeof this.formErrors = {};
-        if (!this.userData.payment) {
-            errors.payment = 'Укажите способ оплаты';
-        }
-        if (!this.userData.address) {
-            errors.address = 'Укажите адрес';
-        }
-        if (!this.userData.email) {
-            errors.email = 'Укажите адрес электронной почты';
-        }
-        if (!this.userData.phone) {
-            errors.phone = 'Укажите номер телефона';
-        }
-        this.formErrors = errors;
-        this.events.emit('input:error', this.formErrors);
-        return Object.keys(errors).length === 0;
-    }
+	fillContactInfo(field: keyof IContactInfo, value: string): void {
+		this.userData[field] = value;
+		if (this.validateContact()) {
+			this.events.emit('order:ready', this.userData);
+		}
+	}
 
-    reset() {
-        this.userData = {
-            payment: '',
-            address: '',
-            email: '',
-            phone: ''
-        };
-        this.formErrors = {}
-        this.events.emit('input:error', this.formErrors);
-    }
+	validateContact(): boolean {
+		const errors: typeof this.formErrors = {};
+		if (!this.userData.payment) {
+			errors.payment = 'Укажите способ оплаты';
+		}
+		if (!this.userData.address) {
+			errors.address = 'Укажите адрес';
+		}
+		if (!this.userData.email) {
+			errors.email = 'Укажите адрес электронной почты';
+		}
+		if (!this.userData.phone) {
+			errors.phone = 'Укажите номер телефона';
+		}
+		this.formErrors = errors;
+		this.events.emit('input:error', this.formErrors);
+		return Object.keys(errors).length === 0;
+	}
+
+	reset() {
+		this.userData = {
+			payment: '',
+			address: '',
+			email: '',
+			phone: '',
+		};
+		this.formErrors = {};
+		this.events.emit('input:error', this.formErrors);
+	}
 }
